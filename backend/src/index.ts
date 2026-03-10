@@ -27,8 +27,9 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(JSON.stringify(result.rows));
     } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
       res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Failed to fetch logs" }));
+      res.end(JSON.stringify({ error: "Failed to fetch logs", details: message }));
     }
     return;
   }
