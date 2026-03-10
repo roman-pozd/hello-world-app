@@ -1,4 +1,4 @@
-const API_URL = process.env.API_URL || "https://019cd768-0ce5-757a-ba1c-9644b442587f-3000.eur-1.stg.rapu.app";
+const API_URL = process.env.API_URL || "https://019cd76d-b0c3-737c-8808-fdfb805e9d0c-3000.eur-1.stg.rapu.app";
 
 interface LogEntry {
   id: number;
