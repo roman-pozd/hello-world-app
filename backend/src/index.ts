@@ -3,14 +3,17 @@ import { Pool } from "pg";
 
 const port = process.env.PORT || 3000;
 
-const sslConfig = process.env.PROJECT_CA_CERT
-  ? { ca: process.env.PROJECT_CA_CERT, rejectUnauthorized: true }
+const caCert = process.env.PROJECT_CA_CERT;
+const sslConfig = caCert
+  ? { ca: caCert, rejectUnauthorized: true }
   : { rejectUnauthorized: false };
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: sslConfig,
-});
+// Strip sslmode from connection string when no CA cert is provided,
+// so the explicit ssl option takes effect without conflicts
+const dbUrl = process.env.DATABASE_URL || "";
+const connectionString = caCert ? dbUrl : dbUrl.replace(/[?&]sslmode=[^&]*/g, "");
+
+const pool = new Pool({ connectionString, ssl: sslConfig });
 
 const server = http.createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
