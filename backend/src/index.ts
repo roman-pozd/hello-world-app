@@ -3,9 +3,9 @@ import { Pool } from "pg";
 
 const port = process.env.PORT || 3000;
 
-// PROJECT_CA_CERT is stored with escaped newlines; decode to PEM format
+// PROJECT_CA_CERT is base64-encoded PEM; decode it
 const rawCert = process.env.PROJECT_CA_CERT;
-const caCert = rawCert ? rawCert.replace(/\\n/g, "\n") : undefined;
+const caCert = rawCert ? Buffer.from(rawCert, "base64").toString() : undefined;
 const sslConfig = caCert
   ? { ca: caCert, rejectUnauthorized: true }
   : { rejectUnauthorized: false };
