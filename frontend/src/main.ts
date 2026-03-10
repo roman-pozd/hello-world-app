@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_URL = process.env.API_URL || "https://019cd71d-c03a-7593-90eb-9625aab56786-3000.eur-1.stg.rapu.app";
 
 async function main() {
   const el = document.getElementById("greeting")!;
