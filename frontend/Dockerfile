@@ -2,10 +2,9 @@ FROM node:22-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
-COPY tsconfig.json index.html ./
+COPY tsconfig.json ./
+COPY index.html ./
 COPY src ./src
-ARG VITE_API_URL=http://localhost:3000
-ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 FROM nginx:alpine
