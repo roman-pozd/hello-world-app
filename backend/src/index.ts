@@ -3,7 +3,9 @@ import { Pool } from "pg";
 
 const port = process.env.PORT || 3000;
 
-const caCert = process.env.PROJECT_CA_CERT;
+// PROJECT_CA_CERT is stored with escaped newlines; decode to PEM format
+const rawCert = process.env.PROJECT_CA_CERT;
+const caCert = rawCert ? rawCert.replace(/\\n/g, "\n") : undefined;
 const sslConfig = caCert
   ? { ca: caCert, rejectUnauthorized: true }
   : { rejectUnauthorized: false };
