@@ -10,10 +10,9 @@ const sslConfig = caCert
   ? { ca: caCert, rejectUnauthorized: true }
   : { rejectUnauthorized: false };
 
-// Strip sslmode from connection string when no CA cert is provided,
-// so the explicit ssl option takes effect without conflicts
-const dbUrl = process.env.DATABASE_URL || "";
-const connectionString = caCert ? dbUrl : dbUrl.replace(/[?&]sslmode=[^&]*/g, "");
+// Always strip sslmode from connection string so our explicit ssl config
+// takes full effect (pg v8 treats sslmode=require as verify-full)
+const connectionString = (process.env.DATABASE_URL || "").replace(/[?&]sslmode=[^&]*/g, "");
 
 const pool = new Pool({ connectionString, ssl: sslConfig });
 
