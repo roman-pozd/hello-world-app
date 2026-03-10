@@ -3,11 +3,13 @@ import { Pool } from "pg";
 
 const port = process.env.PORT || 3000;
 
-// Strip sslmode from connection string so the explicit ssl option takes effect
-const connectionString = (process.env.DATABASE_URL || "").replace(/[?&]sslmode=[^&]*/g, "");
+const sslConfig = process.env.PROJECT_CA_CERT
+  ? { ca: process.env.PROJECT_CA_CERT, rejectUnauthorized: true }
+  : { rejectUnauthorized: false };
+
 const pool = new Pool({
-  connectionString,
-  ssl: { rejectUnauthorized: false },
+  connectionString: process.env.DATABASE_URL,
+  ssl: sslConfig,
 });
 
 const server = http.createServer(async (req, res) => {
